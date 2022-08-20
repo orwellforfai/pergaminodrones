@@ -1,0 +1,100 @@
+'use strict';
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////CLASSES////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class Servicio {
+    constructor(id, nombre, precio, foto) {
+        this.id = id
+        this.nombre = nombre
+        this.precio = precio
+        this.foto = foto
+    }
+
+    mostrarServicio() {
+        console.log("Nombre: " + this.nombre + "\nPrecio: " + this.precio)
+    }
+}
+
+class Pedido {
+    constructor(producto, cantidad) {
+        this.producto = producto;
+        this.cantidad = cantidad;
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////ARRAY DEFINITION///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const pedidos = []                                                                  //Array para los pedidos
+const servicios = []                                                                //Array de Productos válidos
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////VARIABLES DEFINITION///////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Definiciones para tomar del DOM
+const domContenedorServicios = document.getElementById('contenedor-servicios').getElementsByClassName('row');
+
+const domRowContenedorServicios = domContenedorServicios[0];    // Tomo posicion del ROW en el HTML para la carga de Servicios
+
+//Opcion alternativa de hacerlo en dos renglones con dos variables del dom
+// const domContenedorProductos = document.getElementById('contenedor-servicios')
+// const domContenedorRow = domContenedorProductos.getElementsByClassName('row');
+
+const domContenedorCarritoCompras = document.querySelector("#items")   // Se usa para el MODAL que esta dentro del carrito para tomar posicion
+//const domContenedorCarritoCompras= document.getElementById("items")
+
+const domBotonCompra = document.getElementById("botonCompra")
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////FUNCTIONS DEFINITION///////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function cargaServicios() {
+    servicios.push(new Servicio(1, 'Dji Mavic 3', 3000, './img/DjiMavic3.jpg'));
+    servicios.push(new Servicio(2, 'Dji Air 2S', 2850, './img/DjiAir2S.jpg'));
+    servicios.push(new Servicio(3, 'Dji Mavic Air 2', 2700, './img/djidrone.jpg'));
+    servicios.push(new Servicio(4, 'Dji Mini 3 Pro', 3200, './img/djidrone.jpg'));
+
+}
+
+
+function cargarCarrito() {
+    let elementoCarrito = new Pedido(
+        new Servicio(1, 'Dji Mavic 3', 3000, './img/DjiMavic3.jpg'),
+        1
+    );
+    pedidos.push(elementoCarrito);
+}
+
+function dibujarCarrito() {
+    let renglonesCarrito = '';
+
+    pedidos.forEach(
+        (elemento) => {
+            renglonesCarrito+=`
+                <tr>
+                    <td>${elemento.producto.id}</td>
+                    <td>${elemento.producto.nombre}</td>
+                    <td>${elemento.cantidad}</td>
+                    <td>$ ${elemento.producto.precio}</td>
+                </tr>
+            `;
+        }
+    );
+
+    domContenedorCarritoCompras.innerHTML = renglonesCarrito;
+    domBotonCompra.innerText= pedidos.length
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////PROGRAM EXECUTION//////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+cargaServicios()
+cargarCarrito()
+dibujarCarrito()
