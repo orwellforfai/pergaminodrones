@@ -35,19 +35,29 @@ const servicios = []                                                            
 //////////////////////////////VARIABLES DEFINITION///////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//////
 // Definiciones para tomar del DOM
+/////
+
+// Tomo contenedor de Cards ( container + Row)
 const domContenedorServicios = document.getElementById('contenedor-servicios').getElementsByClassName('row');
 
-const domRowContenedorServicios = domContenedorServicios[0];    // Tomo posicion del ROW en el HTML para la carga de Servicios
+// Tomo posicion del ROW en el HTML para la carga de Servicios
+const domRowContenedorServicios = domContenedorServicios[0];
 
 //Opcion alternativa de hacerlo en dos renglones con dos variables del dom
 // const domContenedorProductos = document.getElementById('contenedor-servicios')
 // const domContenedorRow = domContenedorProductos.getElementsByClassName('row');
 
-const domContenedorCarritoCompras = document.querySelector("#items")   // Se usa para el MODAL que esta dentro del carrito para tomar posicion
-//const domContenedorCarritoCompras= document.getElementById("items")
+// Se usa para el MODAL que esta dentro del carrito para tomar posicion
+const domContenedorCarritoCompras = document.getElementById("items")
 
+// Opcion Alternativa usando query selector
+// const domContenedorCarritoCompras = document.querySelector("#items")
+
+// Tomo posicion del boton para asignar el contador de pedidos al cart a medida que se van agregando servicios
 const domBotonCompra = document.getElementById("botonCompra")
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////FUNCTIONS DEFINITION///////////////////////////////////////////////////////////////////////////
@@ -74,22 +84,83 @@ function dibujarCarrito() {
     let renglonesCarrito = '';
 
     pedidos.forEach(
-        (elemento) => {
-            renglonesCarrito+=`
+        (renglon) => {
+            renglonesCarrito += `
                 <tr>
-                    <td>${elemento.producto.id}</td>
-                    <td>${elemento.producto.nombre}</td>
-                    <td>${elemento.cantidad}</td>
-                    <td>$ ${elemento.producto.precio}</td>
+                    <td>${renglon.producto.id}</td>
+                    <td>${renglon.producto.nombre}</td>
+                    <td>${renglon.cantidad}</td>
+                    <td>$ ${renglon.producto.precio}</td>
                 </tr>
             `;
         }
     );
 
     domContenedorCarritoCompras.innerHTML = renglonesCarrito;
-    domBotonCompra.innerText= pedidos.length
+    domBotonCompra.innerText = pedidos.length
 
 }
+
+function crearCard(producto) {
+// Defino Boton
+    let botonAgregar = document.createElement("button")
+    botonAgregar.className = "btn btn-outline-dark mt-auto justify-content-center"
+    botonAgregar.innerText = "Agregar / Comprar"
+
+    //Card body
+    let cuerpoCarta = document.createElement("div");
+    cuerpoCarta.className = "card-body p-4 justify-content-center";
+    cuerpoCarta.innerHTML = `
+        <h5>${producto.nombre}</h5>
+        <p>$ ${producto.precio} pesos argentinos</p>
+    `;
+    cuerpoCarta.append(botonAgregar);
+
+    //Imagen
+    let imagen = document.createElement("img");
+    imagen.src = producto.foto;
+    imagen.className = "card-img-top";
+    imagen.alt = producto.nombre;
+
+
+    //Card
+    let carta = document.createElement("div");
+    carta.className = "card h-100 ";
+    carta.append(imagen);
+    carta.append(cuerpoCarta);
+
+
+    //Contenedor Card
+    let contenedorCarta = document.createElement("div");
+    contenedorCarta.className = "col mb-5 justify-content-center";
+    contenedorCarta.append(carta);
+
+
+
+    //Eventos
+    botonAgregar.onclick = () => {
+        let elementoCarrito = new Pedido(producto,1)
+        pedidos.push(elementoCarrito)
+        dibujarCarrito()
+
+    }
+
+    return contenedorCarta
+}
+
+function dibujarCatalogoProductos() {
+    domRowContenedorServicios.innerHTML = "";
+
+    servicios.forEach(
+        (servicio) => {
+            let contenedorCarta = crearCard(servicio);
+            domRowContenedorServicios.append(contenedorCarta);
+
+        }
+    );
+
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////PROGRAM EXECUTION//////////////////////////////////////////////////////////////////////////////
@@ -98,3 +169,4 @@ function dibujarCarrito() {
 cargaServicios()
 cargarCarrito()
 dibujarCarrito()
+dibujarCatalogoProductos()
