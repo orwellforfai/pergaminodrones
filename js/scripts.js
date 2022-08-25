@@ -5,14 +5,14 @@
 
 class Servicio {
     constructor(id, nombre, precio, foto) {
-        this.id = id
-        this.nombre = nombre
-        this.precio = precio
-        this.foto = foto
+        this.id = id;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.foto = foto;
     }
 
     mostrarServicio() {
-        console.log("Nombre: " + this.nombre + "\nPrecio: " + this.precio)
+        console.log("Nombre: " + this.nombre + "\nPrecio: " + this.precio);
     }
 }
 
@@ -27,8 +27,9 @@ class Pedido {
 //////////////////////////////ARRAY DEFINITION///////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const pedidos = []                                                                  //Array para los pedidos
-const servicios = []                                                                //Array de Productos válidos
+const pedidos = [];                                                                  //Array para los pedidos
+const servicios = [];                                                                //Array de Productos válidos
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,14 +51,16 @@ const domRowContenedorServicios = domContenedorServicios[0];
 // const domContenedorRow = domContenedorProductos.getElementsByClassName('row');
 
 // Se usa para el MODAL que esta dentro del carrito para tomar posicion
-const domContenedorCarritoCompras = document.getElementById("items")
+const domContenedorCarritoCompras = document.getElementById("items");
 
 // Opcion Alternativa usando query selector
 // const domContenedorCarritoCompras = document.querySelector("#items")
 
 // Tomo posicion del boton para asignar el contador de pedidos al cart a medida que se van agregando servicios
-const domBotonCompra = document.getElementById("botonCompra")
+const domBotonCompra = document.getElementById("botonCompra");
 
+// Tomo posicion del footer de cada carrito de compra
+const domFooterCarritoCompras = document.getElementById("footer");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////FUNCTIONS DEFINITION///////////////////////////////////////////////////////////////////////////
@@ -73,39 +76,82 @@ function cargaServicios() {
 
 
 function cargarCarrito() {
-    let elementoCarrito = new Pedido(
-        new Servicio(1, 'Dji Mavic 3', 3000, './img/DjiMavic3.jpg'),
-        1
-    );
-    pedidos.push(elementoCarrito);
+    // let elementoCarrito = new Pedido(
+    //     new Servicio(1, 'Dji Mavic 3', 3000, './img/DjiMavic3.jpg'),
+    //     1
+    // );
+    // pedidos.push(elementoCarrito);
 }
 
 function dibujarCarrito() {
-    let renglonesCarrito = '';
+    let sumaCarrito = 0;
+    domContenedorCarritoCompras.innerHTML = "";
 
     pedidos.forEach(
         (renglon) => {
-            renglonesCarrito += `
-                <tr>
+            let renglonesCarrito = document.createElement("tr");
+
+            renglonesCarrito.innerHTML = `
                     <td>${renglon.producto.id}</td>
                     <td>${renglon.producto.nombre}</td>
-                    <td>${renglon.cantidad}</td>
-                    <td>$ ${renglon.producto.precio}</td>
+                    <td><input id="cantidad-producto-${renglon.producto.id}" type="number" value="${renglon.cantidad}" min="1" max="1000" step="1" style="width: 50px;"/></td>
+                    <td>${renglon.producto.precio}</td>
+                    <td>$ ${renglon.producto.precio * renglon.cantidad}</td>
+                    <td><button id="renglon-producto-${renglon.producto.id}" type="button" class="btn btn-dark"><i class="bi bi-trash-fill"></i></button></td>
                 </tr>
             `;
+            domContenedorCarritoCompras.append(renglonesCarrito);
+
+            // Acumulo en la variable sumacarrito los valores de cara renglon de productos agregados al carrito.
+            sumaCarrito += renglon.producto.precio * renglon.cantidad
+
+
+            // declaro una variable para tomar los datos de la cantidad elegida por el usuario
+            let inputCantidadProductos = document.getElementById(`cantidad-producto-${renglon.producto.id}`)
+            inputCantidadProductos.onchange = (ev) => {
+                // Por defecto tomo el valor EV como evento del evento onchange que a su vez tiene las propiedades de target. value para el nuevo valor que adquiere.
+                // let nuevaCantidad = ev.target.value;
+                // renglon.cantidad = nuevaCantidad
+                renglon.cantidad = ev.target.value;       // por redundante la opcion de definir la variable y tomar el evento, asigno lo que devuelve la funcion al renglon y llamo a dibujar nuevamente
+                dibujarCarrito();
+            }
+
+            // Acciones para el boton de Borrar renglon de producto
+            let borrarProducto = document.getElementById(`renglon-producto-${renglon.producto.id}`);
+
+                borrarProducto.onclick = () => {
+                    removerProductoCarrito(renglon);
+                    dibujarCarrito();
+                };
+
+
         }
     );
 
-    domContenedorCarritoCompras.innerHTML = renglonesCarrito;
-    domBotonCompra.innerText = pedidos.length
+    // Agrego la cantidad de productos agregados al boton de compra del html
+    domBotonCompra.innerText = pedidos.length;
+
+    // Muestro total del carrito
+    if (pedidos.length == 0) {
+        domFooterCarritoCompras.innerHTML = `
+            <th scope="row" colspan="5">Carrito vacío - comience a comprar!</th>
+        `;
+    } else {
+        domFooterCarritoCompras.innerHTML = `
+        <th scope="row" colSpan="5">Total de la compra:  ${sumaCarrito} </th>
+        `;
+    }
+
 
 }
 
+
+
 function crearCard(producto) {
 // Defino Boton
-    let botonAgregar = document.createElement("button")
-    botonAgregar.className = "btn btn-outline-dark mt-auto justify-content-center"
-    botonAgregar.innerText = "Agregar / Comprar"
+    let botonAgregar = document.createElement("button");
+    botonAgregar.className = "btn btn-outline-dark mt-auto justify-content-center";
+    botonAgregar.innerText = "Agregar / Comprar";
 
     //Card body
     let cuerpoCarta = document.createElement("div");
@@ -132,20 +178,19 @@ function crearCard(producto) {
 
     //Contenedor Card
     let contenedorCarta = document.createElement("div");
-    contenedorCarta.className = "col mb-5 justify-content-center";
+    contenedorCarta.className = "col mb-5";
     contenedorCarta.append(carta);
 
 
 
     //Eventos
     botonAgregar.onclick = () => {
-        let elementoCarrito = new Pedido(producto,1)
-        pedidos.push(elementoCarrito)
-        dibujarCarrito()
-
+        let elementoCarrito = new Pedido(producto,1);
+        pedidos.push(elementoCarrito);
+        dibujarCarrito();
     }
 
-    return contenedorCarta
+    return contenedorCarta;
 }
 
 function dibujarCatalogoProductos() {
@@ -161,12 +206,22 @@ function dibujarCatalogoProductos() {
 
 }
 
+function removerProductoCarrito(elementoAEliminar) {
+    // uso el filter para la diferencia entre lo que esta en el array del carrito y tomo la diferencia con el id que quiero eliminar
+    const elementosAMantener = servicios.filter((renglon) =>  renglon.producto.id != elementoAEliminar.producto.id );
+
+    // una forma de borrar algo es asignarle el lenght = 0, de esta forma el array de servicios quedaria vacio
+    servicios.length = 0;
+
+    // asigno nuevamente al carrito los elementos del filtrado original
+    elementosAMantener.forEach((renglon) => servicios.push(renglon));
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////PROGRAM EXECUTION//////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-cargaServicios()
-cargarCarrito()
-dibujarCarrito()
-dibujarCatalogoProductos()
+cargaServicios();
+cargarCarrito();
+dibujarCarrito();
+dibujarCatalogoProductos();
