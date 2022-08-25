@@ -138,7 +138,7 @@ function dibujarCarrito() {
         `;
     } else {
         domFooterCarritoCompras.innerHTML = `
-        <th scope="row" colSpan="5">Total de la compra:  ${sumaCarrito} </th>
+        <th scope="row" colSpan="5">Total de la compra $:  ${sumaCarrito} </th>
         `;
     }
 
@@ -185,8 +185,16 @@ function crearCard(producto) {
 
     //Eventos
     botonAgregar.onclick = () => {
-        let elementoCarrito = new Pedido(producto,1);
-        pedidos.push(elementoCarrito);
+
+        let elementoExistente = servicios.find((renglon) => renglon.producto.id == renglon.id);
+
+        if(elementoExistente){
+            elementoExistente.cantidad +=1
+        } else{
+            let elementoCarrito = new Pedido(producto,1);
+            pedidos.push(elementoCarrito);
+
+        }
         dibujarCarrito();
     }
 
