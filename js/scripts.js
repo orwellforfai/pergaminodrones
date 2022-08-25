@@ -185,6 +185,38 @@ function crearCard(producto) {
 
         }
         dibujarCarrito();
+
+        // Agrego el Sweet Alert para modificar la relacion entre el carrito y el checkout agregando un alert cada vez que se agrega un producto
+        swal({
+            title: "¡Producto agregado!",
+            text: `${producto.nombre} agregado al carrito de compra.`,
+            icon: "success",
+            buttons: {
+                cerrar: {
+                    text: "Cerrar",
+                    value: false
+                },
+                carrito: {
+                    text: "Ir a carrito",
+                    value: true
+                }
+            }
+        }).then((irACarrito) => {
+
+            if(irACarrito) {
+                //swal("Vamos al carrito!");
+                const myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {keyboard: true});
+                const modalToggle = document.getElementById('toggleMyModal');
+                myModal.show(modalToggle);
+
+            }
+        });
+
+
+
+
+
+
     }
 
     return contenedorCarta;
