@@ -31,7 +31,6 @@ const pedidos = [];                                                             
 const servicios = [];                                                                //Array de Productos válidos
 
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////VARIABLES DEFINITION///////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,14 +74,6 @@ function cargaServicios() {
 }
 
 
-function cargarCarrito() {
-    // let elementoCarrito = new Pedido(
-    //     new Servicio(1, 'Dji Mavic 3', 3000, './img/DjiMavic3.jpg'),
-    //     1
-    // );
-    // pedidos.push(elementoCarrito);
-}
-
 function dibujarCarrito() {
     let sumaCarrito = 0;
     domContenedorCarritoCompras.innerHTML = "";
@@ -119,10 +110,10 @@ function dibujarCarrito() {
             // Acciones para el boton de Borrar renglon de producto
             let borrarProducto = document.getElementById(`renglon-producto-${renglon.producto.id}`);
 
-                borrarProducto.onclick = () => {
-                    removerProductoCarrito(renglon);
-                    dibujarCarrito();
-                };
+            borrarProducto.onclick = () => {
+                removerProductoCarrito(renglon);
+                dibujarCarrito();
+            };
 
 
         }
@@ -144,7 +135,6 @@ function dibujarCarrito() {
 
 
 }
-
 
 
 function crearCard(producto) {
@@ -182,16 +172,15 @@ function crearCard(producto) {
     contenedorCarta.append(carta);
 
 
-
     //Eventos
     botonAgregar.onclick = () => {
 
-        let elementoExistente = servicios.find((renglon) => renglon.producto.id == renglon.id);
+        let elementoExistente = pedidos.find((renglon) => renglon.producto.id == producto.id);
 
-        if(elementoExistente){
-            elementoExistente.cantidad +=1
-        } else{
-            let elementoCarrito = new Pedido(producto,1);
+        if (elementoExistente) {
+            elementoExistente.cantidad += 1
+        } else {
+            let elementoCarrito = new Pedido(producto, 1);
             pedidos.push(elementoCarrito);
 
         }
@@ -216,13 +205,13 @@ function dibujarCatalogoProductos() {
 
 function removerProductoCarrito(elementoAEliminar) {
     // uso el filter para la diferencia entre lo que esta en el array del carrito y tomo la diferencia con el id que quiero eliminar
-    const elementosAMantener = servicios.filter((renglon) =>  renglon.producto.id != elementoAEliminar.producto.id );
+    const elementosAMantener = pedidos.filter((renglon) => renglon.producto.id != elementoAEliminar.producto.id);
 
     // una forma de borrar algo es asignarle el lenght = 0, de esta forma el array de servicios quedaria vacio
-    servicios.length = 0;
+    pedidos.length = 0;
 
     // asigno nuevamente al carrito los elementos del filtrado original
-    elementosAMantener.forEach((renglon) => servicios.push(renglon));
+    elementosAMantener.forEach((renglon) => pedidos.push(renglon));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -230,6 +219,5 @@ function removerProductoCarrito(elementoAEliminar) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 cargaServicios();
-cargarCarrito();
 dibujarCarrito();
 dibujarCatalogoProductos();
