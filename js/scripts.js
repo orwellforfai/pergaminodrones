@@ -27,7 +27,7 @@ class Pedido {
 //////////////////////////////ARRAY DEFINITION///////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const pedidos = [];                                                                  //Array para los pedidos
+let pedidos = [];                                                                  //Array para los pedidos
 const servicios = [];                                                                //Array de Productos válidos
 
 
@@ -77,6 +77,11 @@ function cargaServicios() {
 function dibujarCarrito() {
     let sumaCarrito = 0;
     domContenedorCarritoCompras.innerHTML = "";
+
+    // Recupero Carrito de usuario en caso de que este guardado en local storage
+    if (localStorage.getItem("carritoCompra") != null){
+        pedidos = JSON.parse(localStorage.getItem("carritoCompra"))
+    }
 
     pedidos.forEach(
         (renglon) => {
@@ -212,8 +217,8 @@ function crearCard(producto) {
             }
         });
 
-
-
+    // Agrego el carrito al localstorage del Navegador
+    localStorage.setItem("carritoCompra", JSON.stringify(pedidos));
 
 
 
