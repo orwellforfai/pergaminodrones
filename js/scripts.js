@@ -79,9 +79,12 @@ function dibujarCarrito() {
     domContenedorCarritoCompras.innerHTML = "";
 
     // Recupero Carrito de usuario en caso de que este guardado en local storage
-    if (localStorage.getItem("carritoCompra") != null){
-        pedidos = JSON.parse(localStorage.getItem("carritoCompra"))
-    }
+    // Modifico a Operador ternario
+    localStorage.getItem("carritoCompra") != null ? pedidos = JSON.parse(localStorage.getItem("carritoCompra")) : console.log("Sin informacion previa en carrito");
+
+    // if (localStorage.getItem("carritoCompra") != null){
+    //     pedidos = JSON.parse(localStorage.getItem("carritoCompra"))
+    // }
 
     pedidos.forEach(
         (renglon) => {
@@ -208,7 +211,7 @@ function crearCard(producto) {
             }
         }).then((irACarrito) => {
 
-            if(irACarrito) {
+            if (irACarrito) {
                 //swal("Vamos al carrito!");
                 const myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {keyboard: true});
                 const modalToggle = document.getElementById('toggleMyModal');
@@ -217,9 +220,8 @@ function crearCard(producto) {
             }
         });
 
-    // Agrego el carrito al localstorage del Navegador
-    localStorage.setItem("carritoCompra", JSON.stringify(pedidos));
-
+        // Agrego el carrito al localstorage del Navegador
+        localStorage.setItem("carritoCompra", JSON.stringify(pedidos));
 
 
     }
