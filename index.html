@@ -10,8 +10,6 @@
 	<link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
 	<!-- Bootstrap icons-->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet"/>
-	<!-- Sweet Alert-->
-	<script defer src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<!-- Core theme CSS (includes Bootstrap)-->
 	<link href="css/styles.css" rel="stylesheet"/>
 </head>
@@ -41,7 +39,7 @@
 					</ul>
 				</li>
 			</ul>
-			<button  class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+			<button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
 				<i class="bi bi-bag-check-fill"></i>
 				Carrito
 				<span id="botonCompra" class="badge bg-dark text-white ms-1 rounded-pill">0</span>
@@ -97,7 +95,7 @@
 
 </section>
 
-<!-- Modal -->
+<!-- Modal carrito -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -130,19 +128,61 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-				<button type="button" class="btn btn-primary">Terminar compra</button>
+				<button type="button" id="btnfinalizarCompra" class="btn btn-primary" data-bs-toggle="modal"
+				        data-bs-target="#finalizarCompra">Terminar compra
+				</button>
 			</div>
 		</div>
 	</div>
 </div>
 
 
+<!-- Modal Finalizar Compra -->
+<div class="modal fade" id="finalizarCompra" tabindex="-1" aria-labelledby="ModalFinalizarCompra" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="ModalFinalizarCompra">Finalizar Compra</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="container">
+					<div class="mb-3">
+						<label id="valorFinalCarrito">aca deberia sobreescribir el label</label>
+					</div>
+					<form>
+						<div class="mb-3">
+							<label for="inputName" class="form-label">Nombre</label>
+							<input type="text" class="form-control" id="inputName" aria-describedby="nameHelp">
+						</div>
+						<div class="mb-3">
+							<label for="inputLastname" class="form-label">Apellido</label>
+							<input type="text" class="form-control" id="inputLastname">
+						</div>
+						<div class="mb-3">
+							<label for="inputEmail" class="form-label">Correo Electronico</label>
+							<input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp">
+							<div id="emailHelp" class="form-text">Se enviará por correo el voucher de compra.</div>
+						</div>
+					</form>
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary">Pagar</button>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- Footer-->
 <footer class="py-5 bg-dark">
 	<div class="container"><p class="m-0 text-center text-white">Pergamino Drones</p></div>
 </footer>
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Sweet Alert-->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <!-- Core theme JS-->
 <script src="js/scripts.js"></script>
 

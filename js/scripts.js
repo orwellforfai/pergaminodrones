@@ -35,6 +35,12 @@ const servicios = [];                                                           
 //////////////////////////////VARIABLES DEFINITION///////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////////
+//Variables Globales de uso en el Sistema
+///////
+
+let sumaCarritoFinal = 0;
+
 //////
 // Definiciones para tomar del DOM
 /////
@@ -61,6 +67,13 @@ const domBotonCompra = document.getElementById("botonCompra");
 // Tomo posicion del footer de cada carrito de compra
 const domFooterCarritoCompras = document.getElementById("footer");
 
+// Tomo posicion del boton para finalizar compra
+const domBotonFinalizarCompra = document.getElementById("btnfinalizarCompra");
+
+// Tomo posicion del label para mostrar el valor total del pedido en el modal Finalizar compra
+const domLabelFinalizarCompra = document.getElementById("valorFinalCarrito");
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////FUNCTIONS DEFINITION///////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +93,7 @@ function dibujarCarrito() {
 
     // Recupero Carrito de usuario en caso de que este guardado en local storage
     // Modifico a Operador ternario
-    localStorage.getItem("carritoCompra") != null ? pedidos = JSON.parse(localStorage.getItem("carritoCompra")) : console.log("Sin informacion previa en carrito");
+    localStorage.getItem("carritoCompra") != null ? JSON.parse(localStorage.getItem("carritoCompra")) : console.log("Sin informacion previa en carrito");
 
     // if (localStorage.getItem("carritoCompra") != null){
     //     pedidos = JSON.parse(localStorage.getItem("carritoCompra"))
@@ -103,6 +116,7 @@ function dibujarCarrito() {
 
             // Acumulo en la variable sumacarrito los valores de cara renglon de productos agregados al carrito.
             sumaCarrito += renglon.producto.precio * renglon.cantidad
+            sumaCarritoFinal= sumaCarritoFinal+sumaCarrito
 
 
             // declaro una variable para tomar los datos de la cantidad elegida por el usuario
@@ -112,6 +126,7 @@ function dibujarCarrito() {
                 // let nuevaCantidad = ev.target.value;
                 // renglon.cantidad = nuevaCantidad
                 renglon.cantidad = ev.target.value;       // por redundante la opcion de definir la variable y tomar el evento, asigno lo que devuelve la funcion al renglon y llamo a dibujar nuevamente
+                localStorage.setItem("carritoCompra", JSON.stringify(pedidos))
                 dibujarCarrito();
             }
 
@@ -222,7 +237,7 @@ function crearCard(producto) {
 
         // Agrego el carrito al localstorage del Navegador
         localStorage.setItem("carritoCompra", JSON.stringify(pedidos));
-
+        dibujarCarrito();
 
     }
 
@@ -251,7 +266,20 @@ function removerProductoCarrito(elementoAEliminar) {
 
     // asigno nuevamente al carrito los elementos del filtrado original
     elementosAMantener.forEach((renglon) => pedidos.push(renglon));
+
+    localStorage.setItem("carritoCompra", JSON.stringify(pedidos))
 }
+
+function finalizarCarrito() {
+    domBotonFinalizarCompra.onclick = () => {
+        console.log(sumaCarritoFinal)
+        domLabelFinalizarCompra.innerHTML = `Total de la compra $:  ${sumaCarritoFinal} `
+
+    }
+
+
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////PROGRAM EXECUTION//////////////////////////////////////////////////////////////////////////////
@@ -260,3 +288,4 @@ function removerProductoCarrito(elementoAEliminar) {
 cargaServicios();
 dibujarCarrito();
 dibujarCatalogoProductos();
+finalizarCarrito();
