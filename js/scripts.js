@@ -28,7 +28,7 @@ class Pedido {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 let pedidos = [];                                                                  //Array para los pedidos
-const servicios = [];                                                                //Array de Productos válidos
+let servicios = [];                                                                //Array de Productos válidos
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,11 +79,17 @@ const domLabelFinalizarCompra = document.getElementById("valorFinalCarrito");
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function cargaServicios() {
-    servicios.push(new Servicio(1, 'Dji Mavic 3', 3000, './img/DjiMavic3.jpg'));
-    servicios.push(new Servicio(2, 'Dji Air 2S', 2850, './img/DjiAir2S.jpg'));
-    servicios.push(new Servicio(3, 'Dji Mavic Air 2', 2700, './img/djidrone.jpg'));
-    servicios.push(new Servicio(4, 'Dji Mini 3 Pro', 3200, './img/djidrone.jpg'));
+    // servicios.push(new Servicio(1, 'Dji Mavic 3', 3000, './img/DjiMavic3.jpg'));
+    // servicios.push(new Servicio(2, 'Dji Air 2S', 2850, './img/DjiAir2S.jpg'));
+    // servicios.push(new Servicio(3, 'Dji Mavic Air 2', 2700, './img/djidrone.jpg'));
+    // servicios.push(new Servicio(4, 'Dji Mini 3 Pro', 3200, './img/djidrone.jpg'));
 
+    const URLJSON = "servicios.json"
+    fetch(URLJSON)
+        .then(respuesta => respuesta.json())            // llega en la variable servicios el POST del JSON local y lo convierte a objeto
+        .then(servicios => console.log(servicios))      // una vez está el fullfilled asigno esa promesa a servicios
+
+    return (servicios)                                   // Tengo que hacer un return del array servicios para utilizarla en otra funcion
 }
 
 
@@ -244,7 +250,7 @@ function crearCard(producto) {
     return contenedorCarta;
 }
 
-function dibujarCatalogoProductos() {
+function dibujarCatalogoProductos(servicios) {
     domRowContenedorServicios.innerHTML = "";
 
     servicios.forEach(
