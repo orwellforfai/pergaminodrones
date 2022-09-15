@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "nombre": "Dji Mavic 3",
+    "precio": 3000,
+    "foto": "./img/DjiMavic3.jpg"
+  },
+  {
+    "id": 2,
+    "nombre": "Dji Air 2S",
+    "precio": 2850,
+    "foto": "./img/DjiAir2S.jpg"
+  },
+  {
+    "id": 3,
+    "nombre": "Dji Mavic Air 2",
+    "precio": 2700,
+    "foto": "./img/DjiMavic3.jpg"
+  },
+  {
+    "id": 4,
+    "nombre": "Dji Mini 3 Pro",
+    "precio": 3200,
+    "foto": "./img/DjiMavic3.jpg"
+  }
+]
